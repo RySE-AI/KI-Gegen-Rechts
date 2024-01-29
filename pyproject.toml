@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "ki-gegen-rechts"
+version = "0.1.0"
+description = ""
+authors = ["RySE-AI <Ryo.Shibata@outlook.de>"]
+readme = "README.md"
+packages = [{include = "ki_gegen_rechts", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+langchain = "^0.1.3"
+langchain-core = "^0.1.15"
+langchain-community = "^0.0.15"
+openai = "^1.9.0"
+tiktoken = "^0.5.2"
+streamlit = "^1.30.0"
+python-dotenv = "^1.0.1"
+langchain-openai = "^0.0.5"
+
+
+[tool.poetry.group.dev.dependencies]
+jupyterlab = "^4.0.11"
+black = "^23.12.1"
+pylint = "^3.0.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
