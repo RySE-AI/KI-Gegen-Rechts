@@ -50,7 +50,7 @@ class HatespeechDetectionFormat(BaseModel):
         description="A comprehensive explanation of your classification in three sentences."
     )
     classification: str = Field(
-        description="The classification of the message with one of the given categories."
+        description="The classification of the message with one of the given categories. Only use the exact same words inside the XML category tags"
     )
 
 
@@ -76,20 +76,26 @@ The message could fall into one of the following categories:
     `No hate speech`: The message does not exhibit any characteristics of hate speech.
     `Review needed`: The message exhibits some characteristics of hate speech but is not definitive, and therefore, further review is necessary.
     `Unknown`: The message could not be confidently classified due to ambiguity or lack of clear indicators.
+    
 
-Always think step by step and decide based on your conclusion. Always answer in the following format:
-{format_instructions}
+Instructions: Carefully read the message, paying close attention to the context and the language used. Accurately apply the categories based on
+the provided definitions, focusing on how hate speech is presented and the author's intent. Your detailed assessment is vital for ensuring a respectful
+and safe communication environment. Always think step by step and decide based on your conclusion. Do not repeat the explanation of the previous
+expert, provide your perspective to the message and explain your conclusion.
 
-Please review the classification and explanation provided by the previous expert below:
+Here is the classification and explanation provided by the previous expert below:
 <opinion>    
 Classification: {classification}
 Explanation: {explanation}
 </opinion>    
 
-Also, review the content of the message:
+Review the content of the message:
 <message>
 {message}
 </message>
+
+Always answer in the following format:
+{format_instructions}
 
 Answer:
 """
