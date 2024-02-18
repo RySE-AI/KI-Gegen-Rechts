@@ -71,22 +71,19 @@ _HATESPEECH_VALIDATOR = """You are tasked with re-evaluating the classification 
 assessed by another expert in the context of hate speech detection. 
 The message could fall into one of the following categories:
 
-    `Direct hate speech`: The message contains hate speech expressed directly by the author.
+    `Direct hate speech`: The message contains hate speech expressed directly by the author. This does not include any personal experience where the author was the victim of hate speech.
     `Indirect hate speech`: The message contains hate speech that is not directly expressed by the author but implies endorsement or propagation of hate speech.
     `No hate speech`: The message does not exhibit any characteristics of hate speech.
     `Review needed`: The message exhibits some characteristics of hate speech but is not definitive, and therefore, further review is necessary.
     `Unknown`: The message could not be confidently classified due to ambiguity or lack of clear indicators.
     
-
 Instructions: Carefully read the message, paying close attention to the context and the language used. Accurately apply the categories based on
 the provided definitions, focusing on how hate speech is presented and the author's intent. Your detailed assessment is vital for ensuring a respectful
-and safe communication environment. Always think step by step and decide based on your conclusion. Do not repeat the explanation of the previous
-expert, provide your perspective to the message and explain your conclusion.
+and safe communication environment. Always think step by step and decide based on your conclusion. Provide your perspective to the message and explain your conclusion.
 
-Here is the classification and explanation provided by the previous expert below:
+Here is the classification provided by the previous expert below:
 <opinion>    
 Classification: {classification}
-Explanation: {explanation}
 </opinion>    
 
 Review the content of the message:
@@ -206,16 +203,22 @@ HATESPEECH_CLASSIFICATION_PROMPT = PromptTemplate(
 # FCK NZS Rater - Prompt build hybrid with gpt4 and refinements from my side.
 _RIGHT_WING_RATER = """You are an expert in understanding a broad spectrum of political ideologies, with a focus on
 recognizing extreme and harmful rhetoric, including fascism, Nazism, and racial supremacy. You possess a deep
-understanding of historical contexts, particularly related to Germany's history. Your task is to analyze messages
-and rate them on a scale from zero to three, based on the presence and intensity of harmful right-wing ideologies.
+understanding of historical contexts, particularly related to Germany's history. Your task is to analyze messages in the first
+step if the message contain any indication of right-wing ideologies and then rate them into four categories, based on the presence
+and intensity of harmful right-wing ideologies.It is crucial to capture the intensity of the author's emotions, including feelings
+of strong dislike or aversion. If the message describes situations where the author was the victim of right-wing ideologies, this
+should be classified with no right-wing ideologies.
 
-Rating Scale:
-    0: The message contains no indication of right-wing ideologies.
-    1: The message contains subtle hints of right-wing ideologies but is not overtly harmful or inciting.
-    2: The message contains clear right-wing ideological rhetoric, promoting a divisive or exclusionary viewpoint, potentially harmful but not calling for direct action.
-    3: The message is extremely dangerous, openly advocating for violence, hatred, or supremacy based on right-wing extremist ideologies. It requires immediate reporting and intervention.
+First step - Right-wing Indication:
+    Classify with a boolean if the message contains any indication of right-wing ideologies. 
 
-Always think step by step and decide based on your conclusion. Also explain why. The rating is only one number.
+Second Step - Rating Scale:
+    Category 0: The message contains no indication of right-wing ideologies.
+    Category 1: The message contains subtle hints of right-wing ideologies but is not overtly harmful or inciting.
+    Category 2: The message contains clear right-wing ideological rhetoric, promoting a divisive or exclusionary viewpoint, potentially harmful which needs be reported and further reviewed.
+    Category 3: The message is extremely dangerous and constitutes a severe violation of German law. It openly advocates for violence, hatred, or supremacy based on right-wing extremist ideologies. Immediate action is required: reporting the content to the platform it was found on, and notifying law enforcement or other relevant authorities to assess the need for pressing charges.
+
+Always think step by step and decide based on your conclusion. Also explain why and which part in the message was the most relevant for your conclusion.
 
 Always answer in the following format:
 {format_instructions}
@@ -229,8 +232,9 @@ Answer:
 
 
 class RightWingRatingFormat(BaseModel):
-    rating: str = Field(description="The right wing rating")
-    explanation: str = Field(description="A comprehensive explanation of your rating")
+    right_wing_indicator: bool = Field(description="If the content of the message applies to the first step set it to True, else to False")
+    rating: str = Field(description="The right wing rating into the four categories. Use only one of the mentioned categories")
+    explanation: str = Field(description="A comprehensive explanation of your rating.")
 
 
 RIGHT_WING_RATING_PROMPT = PromptTemplate(
