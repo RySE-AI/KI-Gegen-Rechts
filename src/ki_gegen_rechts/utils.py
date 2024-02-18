@@ -104,7 +104,7 @@ def create_tables_single_result(result):
     )
     return df_results, df_expl
 
-
+#TODO: Add borders
 def pretty_tables_single_result(result: dict):
     df_results, df_expl = create_tables_single_result(result)
     results_styler = (
