@@ -9,7 +9,7 @@ WIP
 
 ## Idea - Concept
 
-WORK IN PROGRESS but see first notebook [here](./notebooks/00_Experiment_txt-message_anaylser_gpt3.5.ipynb).
+WORK IN PROGRESS but check out the first notebook [here](./notebooks/00_Experiment_txt-message_anaylser_gpt3.5.ipynb).
 
 
 
