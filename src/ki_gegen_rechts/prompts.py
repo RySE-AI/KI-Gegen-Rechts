@@ -166,7 +166,7 @@ class HatespeechClassifierFormat(BaseModel):
     racism: bool = Field(
         description="If the content of the message applies to the subcategory `Racism` set it to True, else to False"
     )
-    anitsemitism: bool = Field(
+    antisemitism: bool = Field(
         description="If the content of the message applies to the subcategory `Anitsemitism` set to True, else to False"
     )
     homophobia: bool = Field(
